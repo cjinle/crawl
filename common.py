@@ -28,13 +28,14 @@ class Common:
     def db_str(self, s):
         return self._db.escape_string(s)
 
-    def update_crawl_status(self, link_ids = [], site_id = 0):
+    def update_crawl_status(self, link_ids = [], site_id = 0, status = 1):
         if not link_ids or not site_id:
             return False
         import time
         now = time.strftime('%Y-%m-%d %H:%M:%S')
         link_ids = ',' . join([str(x) for x in link_ids])
-        sql = "update crawl_links_%s set crawl_time='%s', status=1 where link_id in (%s) " % (site_id, now, link_ids)
+        sql = "update crawl_links_%s set crawl_time='%s', status='%s' where link_id in (%s) " % \
+              (site_id, now, status, link_ids)
         self._db.query(sql)
         self._db.commit()
         return True

@@ -1,7 +1,7 @@
 from scrapy.spider import BaseSpider
 from scrapy.selector import Selector
 from crawl.items import ContentItem
-
+from scrapy import log
 import common
 
 class VoaContentsSpider(BaseSpider):
@@ -29,6 +29,8 @@ class VoaContentsSpider(BaseSpider):
         i['title'] = sel.xpath("//div[@id='title']/text()").extract()[0].encode('utf-8').strip()
         i['keyword'] = sel.xpath("//meta[@name='keywords']/@content").extract()[0].encode('utf-8').strip()
         i['desc'] = sel.xpath("//meta[@name='keywords']/@content").extract()[0].encode('utf-8').strip()
-        i['content'] = '' . join(sel.xpath("//div[@id='content']/text()").extract()).encode('utf-8').strip()
-        if not i['content']: i['content'] = '' . join(sel.xpath("//div[@class='articleBody']/*").extract()).encode('utf-8').strip()
+        i['content'] = '' . join(sel.xpath("//div[@id='content']/*").extract()).encode('utf-8').strip()
+        if not i['content']: 
+            log.msg("id=content null [%s]" % i['link_id'], level=log.WARNING)
+            i['content'] = '' . join(sel.xpath("//div[@class='articleBody']/*").extract()).encode('utf-8').strip()
         return i 

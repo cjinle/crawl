@@ -16,6 +16,7 @@ ITEM_PIPELINES = {
                   }
 
 LOG_FILE = 'out.log'
+LOG_LEVEL = 'INFO'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'crawl (+http://www.yourdomain.com)'

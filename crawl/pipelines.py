@@ -37,7 +37,8 @@ class CrawlPipeline(object):
 
     def voa_contents(self, item, spider):
         if not item['title'] or not item['content']:
-            print "title or content null"
+            print "ERROR: title or content null [link_id: %s]" % item['link_id']
+            log.msg("title: %s, link_id: %s" % (item['title'], item['link_id']), level=log.ERROR)
             return False
         item['content'] = self._com.db_str(item['content'])
         item['title'] = self._com.db_str(item['title'])
@@ -45,7 +46,8 @@ class CrawlPipeline(object):
         sql = "insert into crawl_contents_1 (`link_id`, `site_id`, `add_time`, `title`, `keywords`, `desc`, `content`) values " \
               " ('%s', '%s', '%s', '%s', '%s', '%s', '%s') " % (item['link_id'], 1, now, item['title'], item['keyword'], item['desc'], item['content'])
         self._com.query(sql)
-        log.msg(sql, level=log.ERROR)
+        # update crawl time
+        self._com.update_crawl_status([item['link_id']], 1)
         return True
 
 

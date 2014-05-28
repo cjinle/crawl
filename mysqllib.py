@@ -23,7 +23,6 @@ class MySQL:
         if not config:
             cfg = ConfigParser.ConfigParser()
             cfg.read('scrapy.cfg')
-            print cfg
             config = cfg._sections['db']
             config.pop('__name__')
         try:
