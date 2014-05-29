@@ -2,30 +2,26 @@
 # mailer test
 
 
-from scrapy.mail import MailSender
+import sys
+import smtplib
+from email.mime.text import MIMEText
+from email.message import Message
 
-conf = {
-    "smtphost" : "smtp.qq.com",
-    "mailfrom" : "1124011778@qq.com",
-    "smtpuser" : "1124011778@qq.com",
-    "smtppass" : "33135331.",
-    "smtpport" : 25,
-    "smtpssl" : True
-}
+HOST='smtp.163.com'
+PORT=25
+USER='seeec@163.com'
+PASS=''
+TO='cjinle@gmail.com'
 
-to = ["cjinle@gmail.com", "a@lok.me"]
+smtp = smtplib.SMTP(local_hostname=HOST)
+smtp.set_debuglevel(1)
+smtp.connect(HOST, PORT)
+smtp.login(USER, PASS)
+msg = MIMEText("mail content")
+msg['Subject'] = 'test mail'
+msg['From'] = USER
+msg['To'] = TO
 
-send_conf = {
-    "to" : to,
-    "subject" : "scrapy subject",
-    "body": "scrapy mail test content"
-}
+smtp.sendmail(USER, TO, msg.as_string())
+print 'sendmail done.'
 
-print send_conf
-
-mailer = MailSender(**conf)
-#mailer = MailSender.from_settings(**conf)
-
-flg = mailer.send(**send_conf)
-
-print flg

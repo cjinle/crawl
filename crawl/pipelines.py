@@ -17,9 +17,9 @@ class CrawlPipeline(object):
 
     def process_item(self, item, spider):
         spider_name = spider.name
-        if spider_name in ('voa_links', 'voa_links2'):
+        if spider_name in ['voa_links2']:
             self.voa_links(item, spider)
-        elif spider_name in ('voa_contents'):
+        elif spider_name in ['voa_contents']:
             self.voa_contents(item, spider)
         else:
             print spider.name

@@ -1,30 +1,34 @@
+from scrapy.spider import BaseSpider
 from scrapy.selector import Selector
-from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
-from scrapy.contrib.spiders import CrawlSpider, Rule
 from crawl.items import LinksItem
 from scrapy import log
 
-class VoaLinksSpider(CrawlSpider):
-    name = 'voa_links'
-    allowed_domains = ['51voa.com']
-    start_urls = ['http://www.51voa.com/']
-    # start_urls = this.urls()
+from scrapy import signals
+from scrapy.xlib.pydispatch import dispatcher
+from scrapy.statscol import StatsCollector
 
-    rules = (
-        Rule(SgmlLinkExtractor(allow=r''), callback='parse_item', follow=True),
-    )
+class VoaLinksSpider(BaseSpider):
+    name = "voa_links"
+    allowed_domains = ["51voa.com"]
+    start_urls = []
 
-    def parse_item(self, response):
+    def __init__(self):
+        str = 'http://www.51voa.com/VOA_Standard_%s.html'
+        self.start_urls = [ str % x for x in range(1, 70) ]
+        dispatcher.connect(self.spider_closed, signals.spider_closed)
+
+    def parse(self, response):
         sel = Selector(response)
-        # print sel
         i = LinksItem()
-        i['url'] = sel.xpath('//a/@href').extract()
-        log.msg("hello")
-        i['base_url'] = 'http://www.51voa.com'
-        #i['domain_id'] = sel.xpath('//input[@id="sid"]/@value').extract()
-        #i['name'] = sel.xpath('//div[@id="name"]').extract()
-        #i['description'] = sel.xpath('//div[@id="description"]').extract()
+        i['url'] = ''
+        # i['url'] = sel.xpath("//div[@id='list']/ul/li/a/@href").extract()
         return i
 
-    def urls(self):
-        return ['http://www.51voa.com/']
+    def spider_closed(self, spider):
+        stats = str(self.crawler.stats.get_stats())
+        # print spider.state.values()
+        import common
+        com = common.Common()
+        com.add_crawl_log(spider, 1, stats)
+        log.msg("spider closed", level=log.INFO)
+        print "spider closed!"
