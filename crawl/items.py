@@ -23,4 +23,6 @@ class ContentItem(Item):
     url = Field()
     content = Field()
     link_id = Field()
+    mp3 = Field()
+    image_urls = Field()
     pass

@@ -51,3 +51,27 @@ class CrawlPipeline(object):
         return True
 
 
+class Mp3Pipeline(object):
+    def __init__(self):
+        pass
+
+    def open_spider(self, spider):
+        log.msg("spider[%s] is open" % spider.name, level=log.INFO)
+
+    def process_item(self, item, spider):
+        self.save_file(item['mp3'])
+        return 
+
+    def save_file(self, path):
+        file_path = path
+        url = 'http://slb.51voa.com' + path
+        print url
+        # import urllib
+        # urllib.urlretrieve(url, 'download' + path)
+        # also can use wget module wget.download(url)
+        # urllib2.urlopen  or urllib.urlopen
+        # urllib.get
+
+    def close_spider(self, spider):
+        log.msg("spider[%s] is closed" % spider.name, level=log.INFO)
+

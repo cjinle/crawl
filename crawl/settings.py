@@ -13,10 +13,15 @@ NEWSPIDER_MODULE = 'crawl.spiders'
 
 ITEM_PIPELINES = {
                   'crawl.pipelines.CrawlPipeline' : 300,
+                  'crawl.pipelines.Mp3Pipeline' : 300,
+                  'scrapy.contrib.pipeline.images.ImagesPipeline' : 1,
                   }
+IMAGES_STORE = 'download'
 
 LOG_FILE = 'out.log'
 LOG_LEVEL = 'INFO'
+
+
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'crawl (+http://www.yourdomain.com)'
