@@ -21,9 +21,22 @@ class CrawlPipeline(object):
             self.voa_links(item, spider)
         elif spider_name in ['voa_contents']:
             self.voa_contents(item, spider)
+        elif spider_name in ['jd5_links']:
+            self.jd5_links(item, spider)
         else:
             print spider.name
         return item
+
+
+    def jd5_links(self, item, spider):
+        values = ""
+        now = time.strftime("%Y-%m-%d %H:%M:%S")
+        for i in item['url']:
+            if i not in self._history: values = "%s ('%s', '%s')," % (values, now, i)
+            self._history.add(i)
+        sql = "insert into crawl_links_2 (add_time, url) values %s" % values
+        self._com.query(sql[:-1])
+        return True
 
     def voa_links(self, item, spider):
         values = ""
