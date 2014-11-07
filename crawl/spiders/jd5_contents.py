@@ -15,11 +15,11 @@ class Jd5ContentsSpider(BaseSpider):
 
     def __init__(self):
         self._com = common.Common()
-        str = "http://www.jd5.com%s"
+        host = "http://www.jd5.com%s"
         for x in self._com.get_crawl_urls(2, True):
             if x.get('url', ''):
-                self.start_urls.append(str % x.get('url', ''))
-                self._urls[str % x.get('url', '')] = x.get('link_id', 0)
+                self.start_urls.append(host % x.get('url', ''))
+                self._urls[host % x.get('url', '')] = x.get('link_id', 0)
         print self._urls
 
     def first_page(self, item):
@@ -55,7 +55,7 @@ class Jd5ContentsSpider(BaseSpider):
             num = 1
         
         if len(item['content']) and (num > 1):
-            item['content'] += "\n<!--more-->\n" + "\n" . join(["<!--{%s}-->" % str(x) for x in range(2,num)])
+            item['content'] += "\n<!--more-->\n" + "\n" . join(["<!--{%s}-->" % str(x) for x in range(2,num+1)])
         self.first_page(item)
         if num > 1:
             for i in range(2, num+1):
