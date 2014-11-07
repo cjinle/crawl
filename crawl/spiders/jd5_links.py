@@ -11,7 +11,7 @@ class Jd5LinksSpider(BaseSpider):
     start_urls.append('http://www.jd5.com/meirong/skincare/')
     for i in range(2, 46):
         start_urls.append('http://www.jd5.com/meirong/skincare/index_%s.html' % i)
-    print start_urls
+    # print start_urls
 
     def parse(self, response):
         sel = Selector(response)
