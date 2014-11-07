@@ -56,21 +56,26 @@ class Jd5ContentsSpider(BaseSpider):
         
         if len(item['content']) and (num > 1):
             item['content'] += "\n<!--more-->\n" + "\n" . join(["<!--{%s}-->" % str(x) for x in range(2,num)])
-        # self.first_page(item)
+        self.first_page(item)
         if num > 1:
-            for i in range(2, num):
+            for i in range(2, num+1):
                 url = response.url.replace('.html', '_%s.html' % i, -1)
-                # print "num:%s, url:%s" % (num, url)
-                yield Request(url, meta={'link_id':item['link_id'],'page':i}, callback=self.parse_pages)
+                meta = {
+                    'link_id': item['link_id'],
+                    'page': i,
+                    'num': num
+                }
+                yield Request(url, meta=meta, callback=self.parse_pages)
 
     def parse_pages(self, response):
         # http://www.icultivator.com/p/3166.html
         sel = Selector(response)
         item = ContentItem()
         item['link_id'] = response.meta['link_id']
-        print "link_id:%s, page:%s, url:%s" % (item['link_id'], response.meta['page'], response.url)
+        print "link_id:%s, page:%s, num:%s, url:%s" % (item['link_id'], response.meta['page'], response.meta['num'], response.url)
         item['title'] = sel.xpath("//h1/text()").extract()[0].encode('utf-8').strip()
         item['keyword'] = ''
         item['desc'] = sel.xpath("//meta[@name='description']/@content").extract()[0].encode('utf-8').strip()
         item['content'] = '' . join(sel.xpath("//div[@class='nv_content']/*").extract()).encode('utf-8').strip()
+        item['page'] = response.meta['page']
         return item

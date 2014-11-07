@@ -26,4 +26,5 @@ class ContentItem(Item):
     mp3 = Field()
     image_urls = Field()
     images = Field()
+    page = Field()
     pass
