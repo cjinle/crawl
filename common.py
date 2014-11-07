@@ -15,7 +15,7 @@ class Common:
         if not site_id:
             return False
         tb = "crawl_links_%s" % site_id
-        sql = "select * from %s where status in (0, 1)" % tb
+        sql = "select * from %s where status in (0, 1) limit 10" % tb
         ret = self._db.get_all(sql)
         if update:
             link_ids = [ x.get('link_id', 0) for x in ret ]

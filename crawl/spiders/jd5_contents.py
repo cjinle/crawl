@@ -1,6 +1,8 @@
+import time
 from scrapy.spider import BaseSpider
 from scrapy.selector import Selector
 from crawl.items import ContentItem
+from scrapy.http import Request
 from scrapy import log
 import common
 
@@ -9,25 +11,66 @@ class Jd5ContentsSpider(BaseSpider):
     allowed_domains = ["jd5.com"]
     start_urls = []
     _urls = {}
+    _com = None
 
     def __init__(self):
-        com = common.Common()
+        self._com = common.Common()
         str = "http://www.jd5.com%s"
-        for x in com.get_crawl_urls(2, True):
+        for x in self._com.get_crawl_urls(2, True):
             if x.get('url', ''):
                 self.start_urls.append(str % x.get('url', ''))
                 self._urls[str % x.get('url', '')] = x.get('link_id', 0)
+        print self._urls
+
+    def first_page(self, item):
+        print "first_page: %s" % int(item['link_id'])
+        if not item['title'] or not item['content']:
+            print "ERROR: (jd5:1) title or content null [link_id: %s]" % item['link_id']
+            log.msg("title: %s, link_id: %s" % (item['title'], item['link_id']), level=log.ERROR)
+            return False
+        item['content'] = self._com.db_str(item['content'])
+        item['title'] = self._com.db_str(item['title'])
+        now = time.strftime("%Y-%m-%d %H:%M:%S")
+        site_id = 2
+        sql = "insert into crawl_contents_2 (`link_id`, `site_id`, `add_time`, `title`, `keywords`, `desc`, `content`) values " \
+              " ('%s', '%s', '%s', '%s', '%s', '%s', '%s') " % (item['link_id'], site_id, now, item['title'], item['keyword'], item['desc'], item['content'])
+        self._com.query(sql)
+        # update crawl time
+        self._com.update_crawl_status([item['link_id']], site_id)
+        return True
 
     def parse(self, response):
         sel = Selector(response)
-        i = ContentItem()
-        # i['title'] = sel.xpath("//title/text()").extract()[0]
-        i['link_id'] = self._urls.get(response.url)
-        last_page = sel.xpath("//div[@id='content_pages']/a/@href").extract()[-1]
-        num = int(last_page.split('_')[-1].split('.')[0])
-        print num
-        pass
+        item = ContentItem()
+        item['link_id'] = self._urls.get(response.url)
+        # print "link_id: %s, url: %s" % (item['link_id'], response.url)
+        item['title'] = sel.xpath("//h1/text()").extract()[0].encode('utf-8').strip()
+        item['keyword'] = ''
+        item['desc'] = sel.xpath("//meta[@name='description']/@content").extract()[0].encode('utf-8').strip()
+        item['content'] = '' . join(sel.xpath("//div[@class='nv_content']/*").extract()).encode('utf-8').strip()
+        pages = sel.xpath("//div[@id='content_pages']/a/@href").extract()
+        if len(pages):
+            num = int(pages[-1].split('_')[-1].split('.')[0])
+        else:
+            num = 1
+        
+        if len(item['content']) and (num > 1):
+            item['content'] += "\n<!--more-->\n" + "\n" . join(["<!--{%s}-->" % str(x) for x in range(2,num)])
+        # self.first_page(item)
+        if num > 1:
+            for i in range(2, num):
+                url = response.url.replace('.html', '_%s.html' % i, -1)
+                # print "num:%s, url:%s" % (num, url)
+                yield Request(url, meta={'link_id':item['link_id'],'page':i}, callback=self.parse_pages)
 
-    def parse_pages(self):
+    def parse_pages(self, response):
         # http://www.icultivator.com/p/3166.html
-        pass
+        sel = Selector(response)
+        item = ContentItem()
+        item['link_id'] = response.meta['link_id']
+        print "link_id:%s, page:%s, url:%s" % (item['link_id'], response.meta['page'], response.url)
+        item['title'] = sel.xpath("//h1/text()").extract()[0].encode('utf-8').strip()
+        item['keyword'] = ''
+        item['desc'] = sel.xpath("//meta[@name='description']/@content").extract()[0].encode('utf-8').strip()
+        item['content'] = '' . join(sel.xpath("//div[@class='nv_content']/*").extract()).encode('utf-8').strip()
+        return item
