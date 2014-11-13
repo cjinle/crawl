@@ -54,4 +54,24 @@ class Common:
         self.query(sql)
         return True
 
+    def send_mail(self, to, subject, content):
+        import sys
+        import ConfigParser
+        import smtplib
+        from email.mime.text import MIMEText
+        from email.message import Message
+        cfg = ConfigParser.ConfigParser()
+        cfg.read('scrapy.cfg')
+        config = cfg._sections['mail']
+        smtp = smtplib.SMTP(local_hostname=config['host'])
+        smtp.set_debuglevel(1)
+        smtp.connect(config['host'], config['port'])
+        smtp.login(config['user'], config['passwd'])
+        msg = MIMEText(config)
+        msg['Subject'] = subject
+        msg['From'] = config['user']
+        msg['To'] = to
+        smtp.sendmail(config['user'], to, msg.as_string())
+        return True
+
 

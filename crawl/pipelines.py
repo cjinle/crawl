@@ -36,26 +36,26 @@ class CrawlPipeline(object):
         for i in item['url']:
             if i not in self._history: values = "%s ('%s', '%s')," % (values, now, i)
             self._history.add(i)
-        sql = "insert into crawl_links_2 (add_time, url) values %s" % values
+        sql = "insert into crawl_links_%s (add_time, url) values %s" % (item['siteid'], values)
         self._com.query(sql[:-1])
         return True
 
     def jd5_contents(self, item, spider):
         if not item['title'] or not item['content']:
-            print "ERROR: (jd5) title or content null [link_id: %s]" % item['link_id']
+            print "ERROR: (jd5) title or content null [link_id: %s, site_id: %s]" % (item['link_id'], item['siteid'])
             log.msg("title: %s, link_id: %s" % (item['title'], item['link_id']), level=log.ERROR)
             return False
         item['content'] = self._com.db_str(item['content'])
         item['title'] = self._com.db_str(item['title'])
-        sql = "select * from crawl_contents_2 where link_id='%s' limit 1" % item['link_id']
+        sql = "select * from crawl_contents_%s where link_id='%s' limit 1" % (item['siteid'], item['link_id'])
         post = self._com.get_one(sql)
         if post:
             # content = post['content'].replace("<!--{2}-->", item['content'].encode('utf-8'))
             content = post['content'].encode('utf-8').replace("<!--{%s}-->" % item['page'], item['content'])
-            sql = "update crawl_contents_2 set `content`='%s' where `link_id`='%s'" % (content, item['link_id'])
+            sql = "update crawl_contents_%s set `content`='%s' where `link_id`='%s'" % (item['siteid'], content, item['link_id'])
             self._com.query(sql)
         else:
-            log.msg("spider[%s] link_id[%s] page[%s] source post not exist!" % (spider.name, item['link_id'], item['page']), level=log.ERROR)
+            log.msg("spider[%s] site_id[%s] link_id[%s] page[%s] source post not exist!" % (item['siteid'], spider.name, item['link_id'], item['page']), level=log.ERROR)
         return True
 
     def voa_links(self, item, spider):

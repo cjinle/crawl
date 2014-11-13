@@ -14,6 +14,7 @@ class CrawlItem(Item):
 class LinksItem(Item):
     url = Field()
     base_url = Field()
+    siteid = Field()
     pass
 
 class ContentItem(Item):
@@ -27,4 +28,5 @@ class ContentItem(Item):
     image_urls = Field()
     images = Field()
     page = Field()
+    siteid = Field()
     pass

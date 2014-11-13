@@ -22,6 +22,26 @@ LOG_FILE = 'out.log'
 LOG_LEVEL = 'INFO'
 
 
-
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'crawl (+http://www.yourdomain.com)'
+
+# custom settings
+SITEID = 5
+SITEINFO = {
+    2 : {
+        'start_page' : 'http://www.jd5.com/meirong/skincare/',
+        'max_page_num' : 46,
+    },
+    3 : {
+        'start_page' : 'http://www.jd5.com/fushi/with/',
+        'max_page_num' : 77,
+    },
+    4 : {
+        'start_page' : 'http://www.jd5.com/fushi/single/',
+        'max_page_num' : 29,
+    },
+    5 : {
+        'start_page' : 'http://www.jd5.com/meirong/makeup/',
+        'max_page_num' : 41,
+    },
+}
