@@ -26,7 +26,7 @@ LOG_LEVEL = 'INFO'
 #USER_AGENT = 'crawl (+http://www.yourdomain.com)'
 
 # custom settings
-SITEID = 5
+SITEID = 3
 SITEINFO = {
     2 : {
         'start_page' : 'http://www.jd5.com/meirong/skincare/',
@@ -34,7 +34,7 @@ SITEINFO = {
     },
     3 : {
         'start_page' : 'http://www.jd5.com/fushi/with/',
-        'max_page_num' : 77,
+        'max_page_num' : 2,
     },
     4 : {
         'start_page' : 'http://www.jd5.com/fushi/single/',

@@ -25,7 +25,7 @@ class VoaLinksSpider(BaseSpider):
         return i
 
     def spider_closed(self, spider):
-        stats = str(self.crawler.stats.get_stats())
+        stats = self.crawler.stats.get_stats()
         # print spider.state.values()
         import common
         com = common.Common()

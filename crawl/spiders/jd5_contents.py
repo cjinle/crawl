@@ -93,7 +93,8 @@ class Jd5ContentsSpider(BaseSpider):
         return item
 
     def spider_closed(self, spider):
-        stats = str(self.crawler.stats.get_stats())
+        stats = self.crawler.stats.get_stats()
+        stats['siteid'] = self.siteid
         import common
         com = common.Common()
         com.add_crawl_log(spider, self.siteid, stats)
