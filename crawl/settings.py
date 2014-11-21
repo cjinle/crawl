@@ -26,7 +26,8 @@ LOG_LEVEL = 'INFO'
 #USER_AGENT = 'crawl (+http://www.yourdomain.com)'
 
 # custom settings
-SITEID = 3
+# only for jd5_links,jd5_contents spiders
+SITEID = 6
 SITEINFO = {
     2 : {
         'start_page' : 'http://www.jd5.com/meirong/skincare/',
@@ -34,7 +35,7 @@ SITEINFO = {
     },
     3 : {
         'start_page' : 'http://www.jd5.com/fushi/with/',
-        'max_page_num' : 2,
+        'max_page_num' : 77,
     },
     4 : {
         'start_page' : 'http://www.jd5.com/fushi/single/',
@@ -43,5 +44,13 @@ SITEINFO = {
     5 : {
         'start_page' : 'http://www.jd5.com/meirong/makeup/',
         'max_page_num' : 41,
+    },
+    6 : {
+        'start_page' : 'http://www.jd5.com/meiti/fat/',
+        'max_page_num' : 20,
+    },
+    7 : {
+        'start_page' : 'http://www.jd5.com/meiti/loss/',
+        'max_page_num' : 28,
     },
 }
