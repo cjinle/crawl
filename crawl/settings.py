@@ -27,7 +27,7 @@ LOG_LEVEL = 'INFO'
 
 # custom settings
 # only for jd5_links,jd5_contents spiders
-SITEID = 6
+SITEID = 11
 SITEINFO = {
     2 : {
         'start_page' : 'http://www.jd5.com/meirong/skincare/',
@@ -52,5 +52,21 @@ SITEINFO = {
     7 : {
         'start_page' : 'http://www.jd5.com/meiti/loss/',
         'max_page_num' : 28,
+    },
+    8 : {
+        'start_page' : 'http://www.jd5.com/xingzuo/fashion/',
+        'max_page_num' : 11,
+    },
+    9 : {
+        'start_page' : 'http://www.jd5.com/xingzuo/test/',
+        'max_page_num' : 3,
+    },
+    10 : {
+        'start_page' : 'http://www.jd5.com/xingzuo/geomancy/',
+        'max_page_num' : 3,
+    },
+    11 : {
+        'start_page' : 'http://www.jd5.com/xingzuo/occult/',
+        'max_page_num' : 2,
     },
 }
