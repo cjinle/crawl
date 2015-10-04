@@ -1,7 +1,7 @@
 
 # ignore files
 
+scrapy.cfg
 *.py[co]
 *.log
 download/
-*.cfg
