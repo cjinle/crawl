@@ -20,13 +20,13 @@ class VoaContentsSpider(BaseSpider):
         
 
     def parse(self, response):
-        # print response.url
+        print response.url
         # print self._urls
         sel = Selector(response)
         i = ContentItem()
         # i['title'] = sel.xpath("//title/text()").extract()[0]
         i['link_id'] = self._urls.get(response.url)
-        i['title'] = sel.xpath("//div[@id='title']/text()").extract()[0].encode('utf-8').strip()
+        i['title'] = sel.xpath("//div[@id='title']/h1/text()").extract()[0].encode('utf-8').strip()
         i['keyword'] = sel.xpath("//meta[@name='keywords']/@content").extract()[0].encode('utf-8').strip()
         i['desc'] = sel.xpath("//meta[@name='keywords']/@content").extract()[0].encode('utf-8').strip()
         i['content'] = '' . join(sel.xpath("//div[@id='content']/*").extract()).encode('utf-8').strip()

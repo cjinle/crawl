@@ -17,7 +17,7 @@ class CrawlPipeline(object):
 
     def process_item(self, item, spider):
         spider_name = spider.name
-        if spider_name in ['voa_links2']:
+        if spider_name in ['voa_links2','voa_links']:
             self.voa_links(item, spider)
         elif spider_name in ['voa_contents']:
             self.voa_contents(item, spider)
@@ -65,6 +65,7 @@ class CrawlPipeline(object):
             if i not in self._history: values = "%s ('%s', '%s')," % (values, now, i)
             self._history.add(i)
         sql = "insert into crawl_links_1 (add_time, url) values %s" % values
+        # print sql
         self._com.query(sql[:-1])
         return True
 

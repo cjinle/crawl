@@ -21,7 +21,7 @@ class VoaLinksSpider(BaseSpider):
         sel = Selector(response)
         i = LinksItem()
         i['url'] = ''
-        # i['url'] = sel.xpath("//div[@id='list']/ul/li/a/@href").extract()
+        i['url'] = sel.xpath("//div[@id='list']/ul/li/a/@href").extract()
         return i
 
     def spider_closed(self, spider):
