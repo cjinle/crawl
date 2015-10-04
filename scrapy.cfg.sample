@@ -1,0 +1,20 @@
+[settings]
+default = crawl.settings
+
+[deploy]
+#url = http://localhost:6800/
+project = crawl
+
+
+[db]
+host = 127.0.0.1
+user = root
+passwd = 
+db = cms
+charset = utf8
+
+[mail]
+host = smtp.163.com
+port = 25
+user = seeec@163.com
+passwd = 
