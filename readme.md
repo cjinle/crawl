@@ -8,3 +8,7 @@
 
 
 ### scrapy 0.2.0
+
+
+## 创建配置文件
+> mv scrapy.cfg.sample scrapy.cfg
