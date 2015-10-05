@@ -11,6 +11,13 @@ class Common:
     def __init__(self):
         self._db = mysqllib.MySQL()
 
+    def get_cat_info(self, cid = 0):
+        if not cid:
+            return False
+        sql = "select c.*,s.host from cw_categories as c left join cw_sites as s on (c.sid=s.sid) " \
+              " where c.cid='%s' " % cid
+        return self._db.get_one(sql)
+
     def get_crawl_urls(self, site_id = 0, update = False):
         if not site_id:
             return False
@@ -40,7 +47,7 @@ class Common:
         import socket
         subject = "crawl result [spider:%s] %s!" % (spider.name, socket.gethostname())
         ext = [ "%s: %s" % (str(k), str(v)) for k,v in ext.items() ]
-        self.send_mail('chenjinle@qq.com', subject, "\n".join(ext))
+        # self.send_mail('chenjinle@qq.com', subject, "\n".join(ext))
         # ext = self.db_str(ext.encode('utf-8').strip())
         ext = self.db_str("<br>".join(ext))
         sql = "insert into crawl_logs (site_id, spider, log_type, ip, add_time, ret, content) values " \

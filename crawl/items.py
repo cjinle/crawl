@@ -5,16 +5,14 @@
 
 from scrapy.item import Item, Field
 
-class CrawlItem(Item):
-    # define the fields for your item here like:
-    # name = Field()
-    pass
 
 
 class LinksItem(Item):
     url = Field()
     base_url = Field()
     siteid = Field()
+    cid = Field()
+    pubtime = Field()
     pass
 
 class ContentItem(Item):

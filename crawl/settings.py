@@ -13,7 +13,6 @@ NEWSPIDER_MODULE = 'crawl.spiders'
 
 ITEM_PIPELINES = {
                   'crawl.pipelines.CrawlPipeline' : 300,
-                  'crawl.pipelines.Mp3Pipeline' : 300,
                   'scrapy.contrib.pipeline.images.ImagesPipeline' : 1,
                   }
 IMAGES_STORE = 'download'
@@ -26,47 +25,6 @@ LOG_LEVEL = 'INFO'
 #USER_AGENT = 'crawl (+http://www.yourdomain.com)'
 
 # custom settings
-# only for jd5_links,jd5_contents spiders
-SITEID = 11
-SITEINFO = {
-    2 : {
-        'start_page' : 'http://www.jd5.com/meirong/skincare/',
-        'max_page_num' : 46,
-    },
-    3 : {
-        'start_page' : 'http://www.jd5.com/fushi/with/',
-        'max_page_num' : 77,
-    },
-    4 : {
-        'start_page' : 'http://www.jd5.com/fushi/single/',
-        'max_page_num' : 29,
-    },
-    5 : {
-        'start_page' : 'http://www.jd5.com/meirong/makeup/',
-        'max_page_num' : 41,
-    },
-    6 : {
-        'start_page' : 'http://www.jd5.com/meiti/fat/',
-        'max_page_num' : 20,
-    },
-    7 : {
-        'start_page' : 'http://www.jd5.com/meiti/loss/',
-        'max_page_num' : 28,
-    },
-    8 : {
-        'start_page' : 'http://www.jd5.com/xingzuo/fashion/',
-        'max_page_num' : 11,
-    },
-    9 : {
-        'start_page' : 'http://www.jd5.com/xingzuo/test/',
-        'max_page_num' : 3,
-    },
-    10 : {
-        'start_page' : 'http://www.jd5.com/xingzuo/geomancy/',
-        'max_page_num' : 3,
-    },
-    11 : {
-        'start_page' : 'http://www.jd5.com/xingzuo/occult/',
-        'max_page_num' : 2,
-    },
-}
+# only for haha365 spiders
+# table cw_categories 
+CID = 1
