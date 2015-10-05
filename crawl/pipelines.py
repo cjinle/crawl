@@ -18,12 +18,14 @@ class CrawlPipeline(object):
     def process_item(self, item, spider):
         spider_name = spider.name
         print spider_name
-        if spider_name in ['voa_links2','voa_links']:
+        if spider_name in ['voa_links']:
             self.voa_links(item, spider)
         elif spider_name in ['voa_contents']:
             self.voa_contents(item, spider)
         elif spider_name in ['haha365_links']:
             self.haha365_links(item, spider)
+        elif spider_name in ['haha365']:
+            self.haha365(item, spider)
         else:
             print spider.name
         return item
@@ -31,7 +33,6 @@ class CrawlPipeline(object):
     def haha365_links(self, item, spider):
         values = ""
         cid = item['cid']
-        print cid
         for (k, url) in enumerate(item['url']):
             pubtime = time.mktime(time.strptime("2015-%s" % item['pubtime'][k], "%Y-%m-%d"))
             if url not in self._history: values = "%s ('%s', '%s', '%s', '', '')," % (values, cid, url, pubtime)
@@ -39,6 +40,10 @@ class CrawlPipeline(object):
         sql = "insert into cw_posts (cid, url, pubtime, content, ext) values %s" % values
         print sql
         self._com.query(sql.rstrip(','))
+        return True
+
+    def haha365(self, item, spider):
+        print item
         return True
 
 

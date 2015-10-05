@@ -6,7 +6,6 @@
 from scrapy.item import Item, Field
 
 
-
 class LinksItem(Item):
     url = Field()
     base_url = Field()
@@ -21,10 +20,6 @@ class ContentItem(Item):
     desc = Field()
     url = Field()
     content = Field()
-    link_id = Field()
-    mp3 = Field()
-    image_urls = Field()
-    images = Field()
-    page = Field()
-    siteid = Field()
+    pid = Field()
+    cid = Field()
     pass

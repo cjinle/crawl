@@ -16,15 +16,15 @@ class Haha365LinksSpider(BaseSpider):
     _com = None
 
     def __init__(self):
-    	self._com = common.Common()
-    	cinfo = self._com.get_cat_info(self.cid)
-    	if cinfo is False:
-    		return False
-    	self.allowed_domains.append(cinfo['host'])
-    	for i in range(1, cinfo['pcnt']+1):
-    		url = cinfo['url'] % i
-    		self.start_urls.append("http://%s/%s" % (cinfo['host'], url))
-    	print self.start_urls
+        self._com = common.Common()
+        cinfo = self._com.get_cat_info(self.cid)
+        if cinfo is False:
+            return False
+        self.allowed_domains.append(cinfo['host'])
+        for i in range(1, cinfo['pcnt']+1):
+            url = cinfo['url'] % i
+            self.start_urls.append("http://%s/%s" % (cinfo['host'], url))
+        print self.start_urls
 
     def parse(self, response):
     	sel = Selector(response)
