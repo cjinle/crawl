@@ -21,8 +21,16 @@ class Common:
     def get_crawl_urls(self, cid = 0, status = 0):
         if not cid:
             return False
-        sql = "select * from cw_posts where cid='%s' and status='%s' limit 2" % (cid, status)
+        sql = "select * from cw_posts where cid='%s' and status='%s' order by pid desc" % (cid, status)
         return self._db.get_all(sql)
+
+    def update_crawl_status(self, pids = [], status = 0):
+        if not pids:
+            return False
+        pids = ',' . join([str(x) for x in pids])
+        now = int(time.time())
+        sql = "update cw_posts set status='%s', add_time='%s' where pids in (%s) " % (status, now, pids)
+        return self._db.query(sql)
 
     def query(self, sql):
         self._db.query(sql)

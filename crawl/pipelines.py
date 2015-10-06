@@ -43,9 +43,15 @@ class CrawlPipeline(object):
         return True
 
     def haha365(self, item, spider):
-        print item
-        return True
-
+        pid = item['pid']
+        item['content'] = item['content'].strip()
+        print pid, item['content']
+        if not pid or not item['content'] or not item['title']:
+            return False
+        now = int(time.time())
+        sql = "update cw_posts set title='%s', content='%s', keywords='%s', description='%s', addtime='%s' " \
+              ", status=1 where pid='%s' limit 1" % (item['title'], item['content'], item['keywords'], item['desc'], now, pid)
+        return self._com.query(sql)
 
     def voa_links(self, item, spider):
         values = ""

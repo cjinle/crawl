@@ -33,10 +33,18 @@ class Haha365Spider(BaseSpider):
     def parse(self, response):
         sel = Selector(response)
         item = ContentItem()
+        print response.url
         item['pid'] = self._urls.get(response.url)
-        item['title'] = sel.xpath("//h1/text()").extract()[0].encode('utf-8').strip()
-        item['keyword'] = ''
-        item['desc'] = sel.xpath("//meta[@name='description']/@content").extract()[0].encode('utf-8').strip()
-        item['content'] = '' . join(sel.xpath("//div[@class='nv_content']/*").extract()).encode('utf-8').strip()
+        item['title'] = sel.xpath("//h1/text()").extract()[0]
+        item['keywords'] = ''
+        item['desc'] = ''
+        # item['keywords'] = sel.xpath("//meta[@name='keywords']/@content").extract()[0]
+        # item['desc'] = sel.xpath("//meta[@name='description']/@content").extract()[0]
+        temp_content = sel.xpath("//div[@id='endtext']/*[1]/text()").extract()
+        if not temp_content:
+            temp_content = sel.xpath("//div[@id='endtext']/text()").extract()
+        item['content'] = ('<br>'.join(temp_content)).strip()
+        if not item['content']:
+            item['content'] = sel.xpath("//div[@id='endtext']/*").extract()[0]
         item['cid'] = self.cid
-        pass 
+        return item

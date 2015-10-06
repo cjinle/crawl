@@ -16,7 +16,7 @@ class LinksItem(Item):
 
 class ContentItem(Item):
     title = Field()
-    keyword = Field()
+    keywords = Field()
     desc = Field()
     url = Field()
     content = Field()
