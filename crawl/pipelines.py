@@ -49,6 +49,7 @@ class CrawlPipeline(object):
         if not pid or not item['content'] or not item['title']:
             return False
         now = int(time.time())
+        item['content'] = self._com.db_str(item['content'])
         sql = "update cw_posts set title='%s', content='%s', keywords='%s', description='%s', addtime='%s' " \
               ", status=1 where pid='%s' limit 1" % (item['title'], item['content'], item['keywords'], item['desc'], now, pid)
         return self._com.query(sql)

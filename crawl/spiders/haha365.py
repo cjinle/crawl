@@ -1,3 +1,8 @@
+
+import sys
+reload(sys)
+sys.setdefaultencoding("utf8")
+
 from scrapy.spider import BaseSpider
 from scrapy.selector import Selector
 from crawl.items import ContentItem
@@ -43,8 +48,8 @@ class Haha365Spider(BaseSpider):
         temp_content = sel.xpath("//div[@id='endtext']/*[1]/text()").extract()
         if not temp_content:
             temp_content = sel.xpath("//div[@id='endtext']/text()").extract()
-        item['content'] = ('<br>'.join(temp_content)).strip()
+        item['content'] = ('<br>'.join(temp_content).encode('utf-8')).strip()
         if not item['content']:
-            item['content'] = sel.xpath("//div[@id='endtext']/*").extract()[0]
+            item['content'] = sel.xpath("//div[@id='endtext']/*").extract()[0].encode('utf-8')
         item['cid'] = self.cid
         return item

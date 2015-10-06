@@ -12,25 +12,54 @@ class Common:
         self._db = mysqllib.MySQL()
 
     def get_cat_info(self, cid = 0):
-        if not cid:
-            return False
+        if not cid: return False
         sql = "select c.*,s.host from cw_categories as c left join cw_sites as s on (c.sid=s.sid) " \
               " where c.cid='%s' " % cid
         return self._db.get_one(sql)
 
+    def get_rcat_info(self, rcid = 0, sid = 0):
+        if not rcid or not sid: return False
+        sql = "select rc.*,s.host from cw_remote_cats as rc left join cw_sites as s on (rc.sid=s.sid) " \
+              " where rcid='%s' and rc.sid='%s' " % (rcid, sid)
+        return self._db.get_one(sql)
+
     def get_crawl_urls(self, cid = 0, status = 0):
-        if not cid:
-            return False
+        if not cid: return False
         sql = "select * from cw_posts where cid='%s' and status='%s' order by pid desc" % (cid, status)
         return self._db.get_all(sql)
 
     def update_crawl_status(self, pids = [], status = 0):
-        if not pids:
-            return False
+        if not pids: return False
         pids = ',' . join([str(x) for x in pids])
         now = int(time.time())
-        sql = "update cw_posts set status='%s', add_time='%s' where pids in (%s) " % (status, now, pids)
-        return self._db.query(sql)
+        timestr = ""
+        if status in [0, 1]:
+            timestr = ",addtime='%s'" % now
+        elif status == 2:
+            timestr = ",synctime='%s'" % now
+        sql = "update cw_posts set status='%s' %s where pid in (%s) " % (status, timestr, pids)
+        return self.query(sql)
+
+    def check(self, cid = 0, update = False):
+        if not cid: return False
+        sql = "select * from cw_posts where cid='%s' and status=1" % cid
+        result = self._db.get_all(sql)
+        pids = []
+        for i in result:
+            content = i['content'].strip()
+            title = i['title'].strip()
+            if not content or not title:
+                pids.append(i['pid'])
+        if update: self.update_crawl_status(pids)
+        return pids
+
+    def get_sync_posts(self, cid = 0, limit = 0):
+        if not cid: return False
+        limit_str = ""
+        if limit > 0: limit_str = " limit %s" % limit
+        sql = "select * from cw_posts where status=1 order by addtime %s" % limit_str
+        return self._db.get_all(sql)
+
 
     def query(self, sql):
         self._db.query(sql)
