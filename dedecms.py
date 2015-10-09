@@ -8,7 +8,7 @@ import common
 
 
 def post(data = {}):
-	if not data or not api:
+	if not data:
 		return False
 	param = {
 		'title': data['title'],
